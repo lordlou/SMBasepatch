@@ -725,6 +725,9 @@ mw_hook_main_game:
     lda.l $7e0998
     cmp #$0008
     bne +
+    lda.l $7e079B
+    cmp #$DF45      ; exclude first room of Ceres as its in Mode7 so doesnt handle message box properly
+    beq +
     jsr mw_handle_queue     ; Handle MW RECVQ only in gamemode 8
 +
     rtl
