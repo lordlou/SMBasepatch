@@ -82,6 +82,8 @@
 
 !current_save_slot = $7e0952
 
+!check_reload = $82F990 ; see freespace82_start in fast_reload.asm
+
 !Big = #$825A
 !Small = #$8289
 !EmptySmall = #$8436
@@ -319,77 +321,6 @@ sm_save_done_hook:
     sta.l !SRAM_SAVING
     ply : plx : clc : plb : plp
     rtl
-
-sm_fix_checksum:
-    pha
-    phx
-    phy
-    php
-
-    %ai16()
-    
-    lda $14
-    pha
-    stz $14
-    ldx #$0010
- -
-    lda.l $a16000,x
-    clc
-    adc $14
-    sta $14
-    inx
-    inx
-    cpx #$065c
-    bne -
-
-    ldx #$0000
-    lda $14
-    sta.l $a16000,x
-    sta.l $a17ff0,x
-    eor #$ffff
-    sta.l $a16008,x
-    sta.l $a17ff8,x
-    pla
-    sta $14
-
-    plp
-    ply
-    plx
-    pla
-    rtl
-
-mw_check_softreset:
-    lda $8b
-    cmp #$3030          ; Check if Start+Select+L+R are pressed
-    bne +
-    lda.l !SRAM_SAVING  ; Don't reset while saving to SRAM
-    bne +
-    lda $0617           ; Don't reset if uploading to the APU
-    bne +
-    lda $0998           ; Don't reset during SM boot or title screen
-    cmp #$0002
-    bcc +
-    lda $7E09C2         ; Don't reset if health is 0
-    cmp #$0000
-    beq +
-
-    lda.l $a1f200       ; start_location
-    cmp #$fffe : bne .zebes
-    lda.l #$0000
-.zebes
-    pha
-    and #$ff00 : xba : sta $079f ; hi byte is area
-    pla : pha
-    and #$00ff : sta $078b      ; low byte is save index
-    pla
-	lda !current_save_slot
-	jsl $818000                     ; Save SRAM
-    jsl sm_fix_checksum             ; Fix SRAM checksum (otherwise SM deletes the file on load)
-
-    stz $4200           ; Disable NMI and joypad autoread
-    jml $808462         ; Jump to SM soft-reset
-+
-    rts
 
 mw_load_sram:
     ; runs just after SRAM -> RAM load complete
@@ -801,7 +732,7 @@ i_live_pickup_multiworld: ; touch PLM code
 
 mw_hook_main_game:
     jsl $A09169     ; Last routine of game mode 8 (main gameplay)
-    jsr mw_check_softreset
+    jsl !check_reload
     lda.l config_multiworld
     beq +
     lda.l $7e0998
