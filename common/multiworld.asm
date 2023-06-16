@@ -9,8 +9,9 @@
 
 ; $70:2600: unused; formerly RPTR aka RCOUNT for item receive queue, & was moved to RAM that gets saved at save stations
 ; $70:2602: WCOUNT (elements written count) for item receive queue
+; $70:2604: SRAM saving marker
 
-; $70:2604 }
+; $70:2606 }
 ; ...      } unused
 ; $70:267F }
 
@@ -51,6 +52,7 @@
 
 !SRAM_MW_ITEMS_RECV = $702000 ; RECV queue buffer
 !SRAM_MW_ITEMS_RECV_WCOUNT = $702602
+!SRAM_SAVING = $702604
 
 ; This location is always saved to the current slot's data in SRAM on save, and loaded from SRAM slot on load.
 ; This takes the place of a global SRAM_MW_ITEM_RECV_RCOUNT, since different saves may have processed different amounts
@@ -77,6 +79,8 @@
 !SRAM_MW_CONFIG_PLAYER_ID = $703078
 
 !varia_seedint_location = $dfff00
+
+!current_save_slot = $7e0952
 
 !Big = #$825A
 !Small = #$8289
@@ -302,13 +306,90 @@ mw_save_sram:
     ; runs just before RAM -> SRAM save
     pha : php
     %ai16()
-    ; no-op. actions would go here
+    lda #$0001
+    sta.l !SRAM_SAVING
     plp : pla
     ; restore overwritten instructions
     tax
     ldy #$0000
     rtl
 
+sm_save_done_hook:
+    lda #$0000
+    sta.l !SRAM_SAVING
+    ply : plx : clc : plb : plp
+    rtl
+
+sm_fix_checksum:
+    pha
+    phx
+    phy
+    php
+
+    %ai16()
+    
+    lda $14
+    pha
+    stz $14
+    ldx #$0010
+ -
+    lda.l $a16000,x
+    clc
+    adc $14
+    sta $14
+    inx
+    inx
+    cpx #$065c
+    bne -
+
+    ldx #$0000
+    lda $14
+    sta.l $a16000,x
+    sta.l $a17ff0,x
+    eor #$ffff
+    sta.l $a16008,x
+    sta.l $a17ff8,x
+    pla
+    sta $14
+
+    plp
+    ply
+    plx
+    pla
+    rtl
+
+mw_check_softreset:
+    lda $8b
+    cmp #$3030          ; Check if Start+Select+L+R are pressed
+    bne +
+    lda.l !SRAM_SAVING  ; Don't reset while saving to SRAM
+    bne +
+    lda $0617           ; Don't reset if uploading to the APU
+    bne +
+    lda $0998           ; Don't reset during SM boot or title screen
+    cmp #$0002
+    bcc +
+    lda $7E09C2         ; Don't reset if health is 0
+    cmp #$0000
+    beq +
+
+    lda.l $a1f200       ; start_location
+    cmp #$fffe : bne .zebes
+    lda.l #$0000
+.zebes
+    pha
+    and #$ff00 : xba : sta $079f ; hi byte is area
+    pla : pha
+    and #$00ff : sta $078b      ; low byte is save index
+    pla
+	lda !current_save_slot
+	jsl $818000                     ; Save SRAM
+    jsl sm_fix_checksum             ; Fix SRAM checksum (otherwise SM deletes the file on load)
+
+    stz $4200           ; Disable NMI and joypad autoread
+    jml $808462         ; Jump to SM soft-reset
++
+    rts
 
 mw_load_sram:
     ; runs just after SRAM -> RAM load complete
@@ -720,6 +801,7 @@ i_live_pickup_multiworld: ; touch PLM code
 
 mw_hook_main_game:
     jsl $A09169     ; Last routine of game mode 8 (main gameplay)
+    jsr mw_check_softreset
     lda.l config_multiworld
     beq +
     lda.l $7e0998
@@ -751,6 +833,9 @@ org $8180f7
 
 org $818027 ; hook saving @ $81:8000 Save to SRAM (after VARIA randomizer's hook - point being to not collide)
     jsl mw_save_sram
+
+org $81807F
+    jml sm_save_done_hook
 
 org $828BB3
     jsl mw_hook_main_game
