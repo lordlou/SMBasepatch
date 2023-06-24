@@ -318,7 +318,7 @@ CLIPLEN:
 	PHA
 	LDA.l config_multiworld
 	BEQ .no_multi
-	LDX #$0020
+	LDX #$0010
 	BRA .end
 .no_multi
 	LDX #$0168 ; original

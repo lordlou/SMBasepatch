@@ -15,6 +15,8 @@
 !SRAM_SAVING = $702604
 !current_save_slot = $7e0952
 
+!check_reload = "jsl !freespace82_start"
+
 lorom
 
 org !freespace82_start

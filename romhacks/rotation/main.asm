@@ -25,6 +25,10 @@ macro i16()
 	rep #$10
 endmacro
 
+!table_box = "table box.tbl"
+!table_box_yellow = "table box_yellow.tbl"
+!table_box_green = "table box_green.tbl"
+
 org $00ffc0
     ;   0              f01234
     db "      SM RANDOMIZER  "

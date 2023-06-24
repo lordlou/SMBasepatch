@@ -82,7 +82,7 @@
 
 !current_save_slot = $7e0952
 
-!check_reload = $82F990 ; see freespace82_start in fast_reload.asm
+!check_reload ?= "" ; see freespace82_start in fast_reload.asm
 
 !Big = #$825A
 !Small = #$8289
@@ -732,7 +732,7 @@ i_live_pickup_multiworld: ; touch PLM code
 
 mw_hook_main_game:
     jsl $A09169     ; Last routine of game mode 8 (main gameplay)
-    jsl !check_reload
+    !check_reload
     lda.l config_multiworld
     beq +
     lda.l $7e0998
@@ -774,7 +774,7 @@ org $828BB3
 namespace message
 org $859963
 
-table box_yellow.tbl,rtl
+!table_box_yellow,rtl
 item_names:
     dw "___      AN ENERGY TANK      ___"
     dw "___         MISSILES         ___"
@@ -903,7 +903,7 @@ item_names:
 cleartable
 
 
-table box.tbl,rtl
+!table_box,rtl
     ;   0                              31
 item_sent:
     dw "___         YOU FOUND        ___"
@@ -971,15 +971,13 @@ write_placeholders:
     lda #$0020
     rts
 
+!table_box_green,rtl
 char_table:
-    ;  <sp>     !      "      #      $      %      %      '      (      )      *      +      ,      -      .      /
-    dw $384E, $38FF, $38FD, $38FE, $38FE, $380A, $38FE, $38FD, $38FE, $38FE, $38FE, $38FE, $38FB, $38FC, $38FA, $38FE
-    ;    0      1      2      3      4      5      6      7      8      9      :      ;      <      =      >      ?
-    dw $3809, $3800, $3801, $3802, $3803, $3804, $3805, $3806, $3807, $3808, $38FE, $38FE, $38FE, $38FE, $38FE, $38FE
-    ;    @      A      B      C      D      E      F      G      H      I      J      K      L      M      N      O
-    dw $38FE, $38E0, $38E1, $38E2, $38E3, $38E4, $38E5, $38E6, $38E7, $38E8, $38E9, $38EA, $38EB, $38EC, $38ED, $38EE
-    ;    P      Q      R      S      T      U      V      W      X      Y      Z      [      \      ]      ^      _
-    dw $38EF, $38F0, $38F1, $38F2, $38F3, $38F4, $38F5, $38F6, $38F7, $38F8, $38F9, $38FE, $38FE, $38FE, $38FE, $38FE
+    dw " \!""#$%%'()*+,-./"
+    dw "0123456789:;<=>?"
+    dw "@ABCDEFGHIJKLMNO"
+    dw "PQRSTUVWXYZ[\\]^_"
+cleartable
 
 PlaceholderBig:
     ; warning: if calling directly, caller must restore their own register widths, since $85:841D calls $85:831E, which blithely SEPs #$20
