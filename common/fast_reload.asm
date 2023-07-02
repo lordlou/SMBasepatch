@@ -8,7 +8,7 @@
 
 ;free space: make sure it doesnt override anything you have
 !freespace82_start = $82F990
-!freespace82_end = $82FA4A
+!freespace82_end = $82FA53
 !freespacea0 = $a0fe00 ;$A0 used for instant save reload
 
 !QUICK_RELOAD = $1f60 ;dont need to touch this
@@ -36,6 +36,9 @@ check_reload:
     lda $7E09C2         ; Don't reset if health is 0
     cmp #$0000
     beq .end
+    lda #$000e
+    jsl $808233         ; Don't reset if escaping
+    bcs .end
     PLA
     PLP
     jsr deathhook
