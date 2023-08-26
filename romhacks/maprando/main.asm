@@ -29,7 +29,7 @@ endmacro
 !table_box_green = "table box_green_smmr.tbl"
 
 ; linked to check_reload in fast_reload.asm of MapRando
-;!check_reload = "jsl $82F82A"
+!check_reload = "jsl $82FA23"
 
 org $00ffc0
     ;   0              f01234
