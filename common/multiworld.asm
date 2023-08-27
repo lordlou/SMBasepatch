@@ -50,9 +50,9 @@
 ; $70:316F }
 
 
-!SRAM_MW_ITEMS_RECV = $702000 ; RECV queue buffer
-!SRAM_MW_ITEMS_RECV_WCOUNT = $702602
-!SRAM_SAVING = $702604
+!SRAM_MW_ITEMS_RECV ?= $702000 ; RECV queue buffer
+!SRAM_MW_ITEMS_RECV_WCOUNT ?= $702602
+!SRAM_SAVING ?= $702604
 
 ; This location is always saved to the current slot's data in SRAM on save, and loaded from SRAM slot on load.
 ; This takes the place of a global SRAM_MW_ITEM_RECV_RCOUNT, since different saves may have processed different amounts
@@ -63,20 +63,20 @@
 ; Uses unused bits at the end of the end of the array of bits representing item locations acquired.
 !ReceiveQueueCompletedCount_InRamThatGetsSavedToSaveSlot = $7ed8ae
 
-!SRAM_MW_ITEMS_SENT_RCOUNT = $702680
-!SRAM_MW_ITEMS_SENT_WCOUNT = $702682
-!SRAM_MW_ITEMS_SENT = $702700    ; SENT queue buffer. [worldId, itemId, itemIndex] (need unique item index to prevent duping)
+!SRAM_MW_ITEMS_SENT_RCOUNT ?= $702680
+!SRAM_MW_ITEMS_SENT_WCOUNT ?= $702682
+!SRAM_MW_ITEMS_SENT ?= $702700    ; SENT queue buffer. [worldId, itemId, itemIndex] (need unique item index to prevent duping)
 
-!SRAM_MW_SM = $703000
-!SRAM_MW_ROMTITLE = $703015
-!SRAM_MW_SEEDINT = $703060
-!SRAM_MW_INITIALIZED = $703064
+!SRAM_MW_SM ?= $703000
+!SRAM_MW_ROMTITLE ?= $703015
+!SRAM_MW_SEEDINT ?= $703060
+!SRAM_MW_INITIALIZED ?= $703064
 
-!SRAM_MW_CONFIG_ENABLED = $703070
-!SRAM_MW_CONFIG_CUSTOM_SPRITE = $703072
-!SRAM_MW_CONFIG_DEATHLINK = $703074
-!SRAM_MW_CONFIG_REMOTE_ITEMS = $703076
-!SRAM_MW_CONFIG_PLAYER_ID = $703078
+!SRAM_MW_CONFIG_ENABLED ?= $703070
+!SRAM_MW_CONFIG_CUSTOM_SPRITE ?= $703072
+!SRAM_MW_CONFIG_DEATHLINK ?= $703074
+!SRAM_MW_CONFIG_REMOTE_ITEMS ?= $703076
+!SRAM_MW_CONFIG_PLAYER_ID ?= $703078
 
 !varia_seedint_location = $dfff00
 

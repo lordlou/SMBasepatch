@@ -31,6 +31,25 @@ endmacro
 ; linked to check_reload in fast_reload.asm of MapRando
 !check_reload = "jsl $82FA23"
 
+!SRAM_MW_ITEMS_RECV = $702700 ; RECV queue buffer
+!SRAM_MW_ITEMS_RECV_WCOUNT = $702B02
+!SRAM_SAVING = $702B04
+
+!SRAM_MW_ITEMS_SENT_RCOUNT = $702B80
+!SRAM_MW_ITEMS_SENT_WCOUNT = $702B82
+!SRAM_MW_ITEMS_SENT = $702C00    ; SENT queue buffer. [worldId, itemId, itemIndex] (need unique item index to prevent duping)
+
+!SRAM_MW_SM = $702F00
+!SRAM_MW_ROMTITLE = $702F15
+!SRAM_MW_SEEDINT = $702F60
+!SRAM_MW_INITIALIZED = $702F64
+
+!SRAM_MW_CONFIG_ENABLED = $702F70
+!SRAM_MW_CONFIG_CUSTOM_SPRITE = $702F72
+!SRAM_MW_CONFIG_DEATHLINK = $702F74
+!SRAM_MW_CONFIG_REMOTE_ITEMS = $702F76
+!SRAM_MW_CONFIG_PLAYER_ID = $702F78
+
 org $00ffc0
     ;   0              f01234
     db "      SM RANDOMIZER  "
