@@ -8,12 +8,13 @@
 
 ;free space: make sure it doesnt override anything you have
 !freespace82_start = $82F990
-!freespace82_end = $82FA53
+!freespace82_end = $82FA65
 !freespacea0 = $a0fe00 ;$A0 used for instant save reload
 
 !QUICK_RELOAD = $1f60 ;dont need to touch this
 !SRAM_SAVING = $702604
 !current_save_slot = $7e0952
+!sram_save_slot_addresses = $81812B
 
 lorom
 
@@ -59,12 +60,21 @@ deathhook:
     lda.l #$0000
 .zebes
     pha
-    and #$ff00 : xba : sta $079f ; hi byte is area
-    pla : pha
-    and #$00ff : sta $078b      ; low byte is save index
-    pla
 	lda !current_save_slot
 	jsl $818000                     ; Save SRAM
+
+    lda !current_save_slot
+    and #$3
+    asl A
+    tax
+    lda !sram_save_slot_addresses, x
+    adc #$0156
+    tax
+    pla
+    pha
+    and #$ff00 : xba : sta $700002,x ; hi byte is area
+    pla
+    and #$00ff : sta $700000,x      ; low byte is save index
     jsl sm_fix_checksum             ; Fix SRAM checksum (otherwise SM deletes the file on load)
 
     jsl $82be17       ; Stop sounds
