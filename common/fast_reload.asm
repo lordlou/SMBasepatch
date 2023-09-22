@@ -8,7 +8,7 @@
 
 ;free space: make sure it doesnt override anything you have
 !freespace82_start = $82F990
-!freespace82_end = $82FA65
+!freespace82_end = $82FA71
 !freespacea0 = $a0fe00 ;$A0 used for instant save reload
 
 !QUICK_RELOAD = $1f60 ;dont need to touch this
@@ -64,8 +64,9 @@ deathhook:
 	jsl $818000                     ; Save SRAM
 
     lda !current_save_slot
-    and #$3
-    asl A
+    and #$0003
+    asl
+    sta $12
     tax
     lda !sram_save_slot_addresses, x
     adc #$0156
@@ -97,24 +98,30 @@ sm_fix_checksum:
     lda $14
     pha
     stz $14
-    ldx #$0010
+    lda $12
+    tax
+    lda !sram_save_slot_addresses, x
+    tax
+    ldy #$0000
  -
-    lda.l $a16000,x
+    lda.l $700000,x
     clc
     adc $14
     sta $14
     inx
     inx
-    cpx #$065c
+    iny
+    iny
+    cpy #$065c
     bne -
 
-    ldx #$0000
+    ldx $12
     lda $14
-    sta.l $a16000,x
-    sta.l $a17ff0,x
+    sta.l $700000,x
+    sta.l $701ff0,x
     eor #$ffff
-    sta.l $a16008,x
-    sta.l $a17ff8,x
+    sta.l $700008,x
+    sta.l $701ff8,x
     pla
     sta $14
 
