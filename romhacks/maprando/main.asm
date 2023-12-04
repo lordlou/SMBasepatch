@@ -25,11 +25,11 @@ macro i16()
 endmacro
 
 !table_box = "table box_smmr.tbl"
-!table_box_yellow = "table box_yellow_smmr.tbl"
-!table_box_green = "table box_green_smmr.tbl"
+!table_box_yellow = "table box_smmr.tbl"
+!table_box_green = "table box_smmr.tbl"
 
 ; linked to check_reload in fast_reload.asm of MapRando
-!check_reload = "jsl $82FA23"
+!check_reload = "jsl $82FE41"
 
 !SRAM_MW_ITEMS_RECV = $702700 ; RECV queue buffer
 !SRAM_MW_ITEMS_RECV_WCOUNT = $702B02
