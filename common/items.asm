@@ -45,21 +45,21 @@ archipelago_hidden_item_plm:
 ;     see e.g. vanilla $84:E15B-E167 for an example structure of the data (charge beam plm)
 ;     this table is at $84f87c IF we're orged at $84f870
 plm_graphics_entry_offworld_progression_item:
-    dw offworld_graphics_data_progression_item    ; off-world progression item (pointer = $9100)
+    dw offworld_graphics_data_progression_item    ; off-world progression item (pointer = $9200)
 prog_item_eight_palette_indices: ; symbol provided for AP patcher to overwrite these 8 bytes:
     db $00, $00, $00, $00, $00, $00, $00, $00
 ; table entry 2 of 2:
 plm_graphics_entry_offworld_item:
-    dw offworld_graphics_data_item    ; off-world item (pointer = $9200)
+    dw offworld_graphics_data_item    ; off-world item (pointer = $9300)
 nonprog_item_eight_palette_indices: ; symbol provided for AP patcher to overwrite these 8 bytes:
     db $00, $00, $00, $00, $00, $00, $00, $00
 
 pushpc
-org $899100
-offworld_graphics_data_progression_item:
 org $899200
+offworld_graphics_data_progression_item:
+org $899300
 offworld_graphics_data_item:
-; the randomizer's patcher will write the actual graphics here at $89:9100 and $89:9200
+; the randomizer's patcher will write the actual graphics here at $89:9200 and $89:9300
 pullpc ; back to bank $84
 v_item:
     dw !IVisibleItem
@@ -230,12 +230,12 @@ i_start_draw_loop:
     lda $1dc7, x              ; Load PLM room argument
     asl #3 : tax
     lda.l rando_item_table+$2, x ; Load item id
-    cmp #$0015
+    cmp #$0016
     bmi .all_items
     ; offworld item:
-    ; item ids #$0015 and up are used to display off-world item names, but the graphics are always either
-    ; item gfx #$0015 or #$0016 (0n21 or 0n22) based only on whether the item is progression/advancement
-    lda #$0015
+    ; item ids #$0016 and up are used to display off-world item names, but the graphics are always either
+    ; item gfx #$0016 or #$0017 (0n22 or 0n23) based only on whether the item is progression/advancement
+    lda #$0016
     clc
     adc.l rando_item_table+$6, x      ; add one if off-world item isnt progression
 
@@ -263,10 +263,10 @@ i_load_custom_graphics:
     asl #3                         ; Multiply by 8 for table width
     tax
     lda.l rando_item_table+$2, x      ; Load item id from item table
-    cmp #$0015
+    cmp #$0016
     bmi .all_items
     ; offworld item:
-    lda #$0015              ; item ids over 20 (#$0015 and up) are used to display off-world item names, but the graphics are always either item gfx #$0015 or #$0016
+    lda #$0016              ; item ids over 20 (#$0016 and up) are used to display off-world item names, but the graphics are always either item gfx #$0016 or #$0017
     clc : adc.l rando_item_table+$6, x      ; add one if off-world item isnt progression
 .all_items
     plx
@@ -339,3 +339,8 @@ plm_sequence_generic_item_0_bitmask:
     ;   #$0000 = do not actually pick up an item (this gets harmlessly OR'ed into samus's equipment)
     ;   #$19 = reserve tank's message box id (will be overriden)
     dw $88F3, $0000 : db $19
+
+; used for Map Rando's Walljump boots item
+plm_sequence_walljump_item:
+    dw $88F3, $0400
+    db $1E

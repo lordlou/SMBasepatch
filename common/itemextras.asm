@@ -2,7 +2,7 @@
 
 ; Graphics pointers for items (by item index)
 ; relocatable to any bank
-; indexed by 0 <= item id <= 0n22
+; indexed by 0 <= item id <= 0n23
 sm_item_graphics:
     ; highest bit clear means this item type's gfx is always loaded already,
     ; and the value is an item gfx index that can be stored directly at $7e:df0c,x
@@ -30,10 +30,11 @@ sm_item_graphics:
     dw $E3C3 ; Screw attack (graphics at $89:8500)
     dw $E3F1 ; Morph ball (graphics at $89:8700)
     dw $E41F ; Reserve tank (graphics at $89:9000)
+    dw $F66E ; F660 + E (Map Rando WallJump boots items, see walljump_item.asm) (graphics at $89:9100)
     dw plm_graphics_entry_offworld_progression_item
     dw plm_graphics_entry_offworld_item
 
-; indexed by 0 <= item id <= 22
+; indexed by 0 <= item id <= 23
 sm_item_plm_pickup_sequence_pointers:
     ; for each type of item, this list points to a useful sequence of PLM data in bank $84
     ; for example, the original bank $84 contains: dw $8968, $0100
@@ -62,6 +63,7 @@ sm_item_plm_pickup_sequence_pointers:
     dw $E3E6 ; Screw attack:   generic item function,         item bitmask,                           message box id byte
     dw $E414 ; Morph ball:     generic item function,         item bitmask,                           message box id byte
     dw $E442 ; Reserve tank:   Reserve tank function,         100
+    dw plm_sequence_walljump_item ; WallJump boots from Map Rando (see collect_WallJump in walljump_item.asm)
     dw plm_sequence_generic_item_0_bitmask ; off-world progression item: generic item function
     dw plm_sequence_generic_item_0_bitmask ; off-world item: generic item function
 
@@ -72,10 +74,10 @@ i_item_setup_shared:
     asl #3                          ; Multiply by 8 for table width
     tax
     lda.l rando_item_table+$2, x       ; Load item id from item table
-    cmp #$0015
+    cmp #$0016
     bmi .all_items
     ; offworld item:
-    lda #$0015              ; item ids over 20 (#$0015 and up) are used to display off-world item names, but the graphics are always either item gfx #$0015 or #$0016
+    lda #$0016              ; item ids over 20 (#$0016 and up) are used to display off-world item names, but the graphics are always either item gfx #$0016 or #$0017
     clc : adc.l rando_item_table+$6, x      ; add one if off-world item isnt progression
 .all_items
     asl ; multiply by 2 for table width

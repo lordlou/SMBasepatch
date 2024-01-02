@@ -686,9 +686,9 @@ i_live_pickup_multiworld: ; touch PLM code
 
 .own_item
     lda.l rando_item_table+$2, x ; Load item id
-    cmp #$0015
+    cmp #$0016
     bmi .own_item1
-    lda #$0014              ; self item id >= #$0015 should never happen... but just call it a reserve tank (#$0014) to avoid a crash
+    lda #$0014              ; self item id >= #$0016 should never happen... but just call it a reserve tank (#$0014) to avoid a crash
 .own_item1
     ; param X = byte offset of item data within sm_item_plm_pickup_sequence_pointers for this item
     asl
@@ -713,7 +713,7 @@ i_live_pickup_multiworld: ; touch PLM code
     tay
     lda.l rando_item_table+$2, x    ; X = original item id aka message table index again
     tax
-    cmp #$0015 ; } skip immediate pickup and message box if this isn't an SM item
+    cmp #$0016 ; } skip immediate pickup and message box if this isn't an SM item
     bpl .end   ; } (this is never expected). should still receive back from network if valid
     ; params: X = item id, Y = Other Player Index
     jsl mw_prep_item_link_messagebox
@@ -797,6 +797,7 @@ item_names:
     dw "___       SCREW ATTACK       ___"
     dw "___       MORPHING BALL      ___"
     dw "___      A RESERVE TANK      ___"
+    dw "___      WALLJUMP BOOTS      ___"
 
     ; add 100 more entries for worst case of a different item at each location
     ; to be filled by patcher

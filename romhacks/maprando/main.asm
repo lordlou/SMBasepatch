@@ -81,12 +81,12 @@ incsrc ../../common/nofanfare.asm
 ; Add code to the main code bank
 ; had to move this from original place ($b88000) since it conflicts with VariaRandomizer's web tracker race protection 
 ; and also MapRando's TitlePatcher (done at generation, search for 0x1C0000)
-; $80CF70 + 0x01C0 (for supermetroid_msu1 patch colliding at $80D02F)
-; from $80D130 to $80D240 (conflict with MapRando oob_death.asm and vanilla_bugfixes.asm)
-org $80D240
+; $80CF70 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
+; from $80D130 to $80D340 (conflict with MapRando oob_death.asm, vanilla_bugfixes.asm and msu1.asm)
+org $80D340
 incsrc ../../common/multiworld.asm
-; $80D470 + 0x01C0 (for supermetroid_msu1 patch colliding at $80D02F)
-org $80D630
+; $80D470 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
+org $80D730
 incsrc ../../common/itemextras.asm
 
 ; had to move this from original place ($84efe0) since it conflicts with VariaRandomizer's beam_doors_plms patch
@@ -103,11 +103,11 @@ incsrc ../../common/items.asm
 
 ; had to move this from original place ($b8c800) since it conflicts with
 ; MapRando's TitlePatcher (done at generation, search for 0x1C0000)
-; $80D500 + 0x01C0 (for supermetroid_msu1 patch colliding at $80D02F)
-org $80D6C0
+; $80D500 + 0x02D0 (for supermetroid_msu1 patch colliding at $80D240)
+org $80D7D0
 incsrc ../../common/startitem.asm
 
-org $80D7C0
+org $80D8C0
 incsrc ../../common/playertable.asm
 
 org $80E7C0

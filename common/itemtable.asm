@@ -5,15 +5,15 @@
 ;    $0001 = item for entirely someone else
 ;    $0002 = SM item link item that sends to the current player and others
 ; Item Id = Tells us the item at this location. Value is always an index into message_item_names aka item_names table.
-;           if <  #$0015,
+;           if <  #$0016,
 ;               SM item (for us or for any other SM player or item link). Value is also valid for indexing into
 ;               sm_item_graphics and sm_item_plm_pickup_sequence_pointers.
-;           if >= #$0015,
+;           if >= #$0016,
 ;               Non-SM offworld item. The set of items matching this is a subset of those with
 ;               Item Destination Type == $0001.
 ; Other Player Index = Index into rando_player_name_table and rando_player_id_table identifying who the item is sent to.
 ;                      Can be self, too, but that should be handled by checking for Item Destination Type = $0000.
-; Advancement = 0 or 1. Indicates which offworld sprite to use if Item Id >= #$0015 (non-SM item).
+; Advancement = 0 or 1. Indicates which offworld sprite to use if Item Id >= #$0016 (non-SM item).
 ;
 ; indexed by item location id
 
