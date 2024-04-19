@@ -92,6 +92,11 @@
 !EmptyBig = #message_EmptyBig
 !PlaceholderBig = #message_PlaceholderBig
 
+; see MapRando itemsounds.asm
+!Click = $37			;Sound when selecting a HUD item
+!SOUNDFX = $EFFE
+!SETFX = $84F019
+
 mw_init_memory:
     rep #$30
     lda.l config_multiworld
@@ -397,7 +402,7 @@ mw_receive_item:
     phb ; data bank cannot be C0+ since SETFX reads from 0000,y and must access WRAM that way
     pea $7e7e
     plb : plb ; DB = $7E
-    jsl SETFX
+    jsl !SETFX
     plb ; restore DB
     lda #$0037
     jsl $809049 ; play sound #$37, or was it 1, idk TODO document

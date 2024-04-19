@@ -29,7 +29,7 @@ endmacro
 !table_box_green = "table box_smmr.tbl"
 
 ; linked to check_reload in fast_reload.asm of MapRando
-!check_reload = "jsl $82FE41"
+!check_reload = "jsl $8598C1"
 
 !SRAM_MW_ITEMS_RECV = $702700 ; RECV queue buffer
 !SRAM_MW_ITEMS_RECV_WCOUNT = $702B02
@@ -72,8 +72,9 @@ incsrc ../../common/config.asm
 ; Super Metroid custom Samus sprite "engine" by Artheau
 ;incsrc "sprite/sprite.asm"
 
-org $85FF00
-incsrc ../../common/nofanfare.asm
+; Map Rando already does this with itemsounds patch
+; org $85FF00
+; incsrc ../../common/nofanfare.asm
 
 ; Start anywhere patch, not used right now until graph based generation is in.
 ; incsrc startanywhere.asm
@@ -83,10 +84,12 @@ incsrc ../../common/nofanfare.asm
 ; and also MapRando's TitlePatcher (done at generation, search for 0x1C0000)
 ; $80CF70 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
 ; from $80D130 to $80D340 (conflict with MapRando oob_death.asm, vanilla_bugfixes.asm and msu1.asm)
-org $80D340
+; from $80D340 to $80E180 (conflict with MapRando reserve_hud.asm)
+org $80E180
 incsrc ../../common/multiworld.asm
 ; $80D470 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
-org $80D730
+; from $80D730 to $80E570 (conflict with MapRando reserve_hud.asm)
+org $80E570
 incsrc ../../common/itemextras.asm
 
 ; had to move this from original place ($84efe0) since it conflicts with VariaRandomizer's beam_doors_plms patch
@@ -94,7 +97,7 @@ incsrc ../../common/itemextras.asm
 ; then conflicted with MapRando:
 ; $FC40 - $FCC0: escape_autosave.asm
 ; $FD00 - $FE80: credits.asm
-org $84f430
+org $84f3c0
 incsrc ../../common/items.asm
 
 ; no longer needed (see seeddata.asm)
@@ -104,11 +107,14 @@ incsrc ../../common/items.asm
 ; had to move this from original place ($b8c800) since it conflicts with
 ; MapRando's TitlePatcher (done at generation, search for 0x1C0000)
 ; $80D500 + 0x02D0 (for supermetroid_msu1 patch colliding at $80D240)
-org $80D7D0
+; moved from $80D7D0 to $83BA00 (for msu1, reserve_hud patch and Palette pointer table for Mosaic colliding)
+org $83BA00 ; size of 0xF0
 incsrc ../../common/startitem.asm
 
-org $80D8C0
+; org $80D8C0
+org $83BAF0 ; size of 0xF00
 incsrc ../../common/playertable.asm
 
-org $80E7C0
+; org $80E7C0
+org $83D8F0
 incsrc ../../common/itemtable.asm

@@ -209,7 +209,7 @@ p_hidden_item:
     dw !IGoto, .loop2
 
 SOUNDFX_84:
-    jsl SOUNDFX
+    jsr !SOUNDFX
     rts
 
 i_start_draw_loop_visible_or_chozo:
