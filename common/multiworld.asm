@@ -296,11 +296,11 @@ mw_write_message:
     lda.l !SRAM_MW_ITEMS_SENT_WCOUNT
     asl #3 : tax
     tya                              ; }
-    sta.l !SRAM_MW_ITEMS_SENT, x     ; } these (from params Y and A) are actually ignored by the client.
+    sta.l !SRAM_MW_ITEMS_SENT        ; } these (from params Y and A) are actually ignored by the client.
     pla                              ; } same for the unwritten bytes 6-7
-    sta.l !SRAM_MW_ITEMS_SENT+$2, x  ; }
+    sta.l !SRAM_MW_ITEMS_SENT+$2     ; }
     pla
-    sta.l !SRAM_MW_ITEMS_SENT+$4, x ; write location id * 8. client will divide to get location id
+    sta.l !SRAM_MW_ITEMS_SENT+$4     ; write location id * 8. client will divide to get location id
 
     lda.l !SRAM_MW_ITEMS_SENT_WCOUNT
     inc a
@@ -501,9 +501,9 @@ mw_handle_queue: ; receive only
     asl #2 : tax
     ; X = offset in buffer of next new message to process, bytes of which are:
     ; [source player id.lo, source player id.hi, SM item type, location id where item was found]
-    lda.l !SRAM_MW_ITEMS_RECV+$2, x
+    lda.l !SRAM_MW_ITEMS_RECV+$2
     sta.b $c1
-    lda.l !SRAM_MW_ITEMS_RECV, x
+    lda.l !SRAM_MW_ITEMS_RECV
     cmp.l config_player_id
     bne .perform_receive
     ; receiving item from self. should be due to remote items AND/OR item link
@@ -572,7 +572,7 @@ mw_handle_queue: ; receive only
     ; now show message box
 
 .perform_receive
-    lda.l !SRAM_MW_ITEMS_RECV, x
+    lda.l !SRAM_MW_ITEMS_RECV
     jsl ap_playerid_to_rom_other_player_index
     bcs .found
     lda #$0000 ; should not happen. but receive from "Archipelago" player if not found
@@ -680,7 +680,7 @@ i_live_pickup_multiworld: ; touch PLM code
 .send_network
     ; params: A = Item Id, X = byte offset of item location's row in rando_item_table (ie, location id * 8), Y = world id to send to (all 16-bit)
     lda.l rando_item_table+$2, x ; load Item Id
-    jsl mw_write_message       ; Send message over network/SRAM
+    ; jsl mw_write_message       ; Send message over network/SRAM
 
     lda.l rando_item_table, x  ; Load item destination type
     beq .own_item
