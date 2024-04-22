@@ -531,3 +531,9 @@ rando_item_table:
 	dw $0000, $0001, $0000, $0000 ; 509 - Unused
 	dw $0000, $0001, $0000, $0000 ; 510 - Unused
 	dw $0000, $0001, $0000, $0000 ; 511 - Unused
+
+; bit array matching collected locations event bit array at 0x7ED870 for Nothing item
+; to prevent client from collecting them
+locations_nothing:
+	dw $0000, $0000, $0000, $0000, $0000
+	dw $0000, $0000, $0000, $0000, $0000
