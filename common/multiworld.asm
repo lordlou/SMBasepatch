@@ -95,7 +95,7 @@
 ; see MapRando itemsounds.asm
 !Click = $37			;Sound when selecting a HUD item
 !SOUNDFX = $EFFE
-!SETFX = $84F019
+!SETFX = $84F01C
 
 mw_init_memory:
     rep #$30
