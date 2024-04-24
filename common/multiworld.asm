@@ -331,21 +331,11 @@ mw_load_sram:
     ; runs just after SRAM -> RAM load complete
     pha : php
     %ai16()
-    lda.l !SRAM_MW_ITEMS_RECV_WCOUNT
-    cmp.l !ReceiveQueueCompletedCount_InRamThatGetsSavedToSaveSlot
-    bmi .setnewgame
+    lda.l !ReceiveQueueCompletedCount_InRamThatGetsSavedToSaveSlot
+    sta.l !SRAM_MW_ITEMS_RECV_WCOUNT
 .done
     plp : pla
     rtl
-.setnewgame
-    ; this means ReceiveQueueCompletedCount_InRamThatGetsSavedToSaveSlot > SRAM_MW_ITEMS_RECV_WCOUNT.
-    ; this is an invalid state where we've supposedly read deeper into the queue than the max amount of data it's had.
-    ; the cause is that we auto-cleared the SRAM over $70:2000, including the whole queue, when a new seed was loaded,
-    ; but perhaps VARIA rando is not around to similarly auto-clear the save slot data, where the read pointer lives.
-    ; let's assume *if* any items are really in the queue, they have already been processed, and make ready to process
-    ; the next thing to come in. more than likely, it's 0.
-    sta.l !ReceiveQueueCompletedCount_InRamThatGetsSavedToSaveSlot
-    bra .done
 
 
 ; Display message that we picked up someone elses item
