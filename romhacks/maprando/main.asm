@@ -108,8 +108,9 @@ incsrc ../../common/items.asm
 ; MapRando's TitlePatcher (done at generation, search for 0x1C0000)
 ; $80D500 + 0x02D0 (for supermetroid_msu1 patch colliding at $80D240)
 ; moved from $80D7D0 to $83BA00 (for msu1, reserve_hud patch and Palette pointer table for Mosaic colliding)
-org $83BA00 ; size of 0xF0
-incsrc ../../common/startitem.asm
+; now done by map rando
+; org $83BA00 ; size of 0xF0
+; incsrc ../../common/startitem.asm
 
 ; org $80D8C0
 org $83BAF0 ; size of 0xF00
