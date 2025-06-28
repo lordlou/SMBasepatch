@@ -85,11 +85,13 @@ incsrc ../../common/config.asm
 ; $80CF70 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
 ; from $80D130 to $80D340 (conflict with MapRando oob_death.asm, vanilla_bugfixes.asm and msu1.asm)
 ; from $80D340 to $80E180 (conflict with MapRando reserve_hud.asm)
-org $80E180
+; from $80E180 to $80E660 (conflict with MapRando decompression.asm)
+org $80E660
 incsrc ../../common/multiworld.asm
 ; $80D470 + 0x02C0 (for supermetroid_msu1 patch colliding at $80D240)
 ; from $80D730 to $80E570 (conflict with MapRando reserve_hud.asm)
-org $80E570
+; from $80E570 to end of multiworld.asm (conflict with MapRando decompression.asm)
+; org $80E570
 incsrc ../../common/itemextras.asm
 
 ; had to move this from original place ($84efe0) since it conflicts with VariaRandomizer's beam_doors_plms patch
@@ -97,7 +99,7 @@ incsrc ../../common/itemextras.asm
 ; then conflicted with MapRando:
 ; $FC40 - $FCC0: escape_autosave.asm
 ; $FD00 - $FE80: credits.asm
-org $84f3c0
+org $84F4E0
 incsrc ../../common/items.asm
 
 ; no longer needed (see seeddata.asm)

@@ -767,7 +767,7 @@ org $828BB3
     jsl mw_hook_main_game
 
 namespace message
-org $859963
+org $85AA00
 
 !table_box_yellow,rtl
 item_names:

@@ -45,21 +45,21 @@ archipelago_hidden_item_plm:
 ;     see e.g. vanilla $84:E15B-E167 for an example structure of the data (charge beam plm)
 ;     this table is at $84f87c IF we're orged at $84f870
 plm_graphics_entry_offworld_progression_item:
-    dw offworld_graphics_data_progression_item    ; off-world progression item (pointer = $9200)
+    dw offworld_graphics_data_progression_item    ; off-world progression item (pointer = $9600)
 prog_item_eight_palette_indices: ; symbol provided for AP patcher to overwrite these 8 bytes:
     db $00, $00, $00, $00, $00, $00, $00, $00
 ; table entry 2 of 2:
 plm_graphics_entry_offworld_item:
-    dw offworld_graphics_data_item    ; off-world item (pointer = $9300)
+    dw offworld_graphics_data_item    ; off-world item (pointer = $9700)
 nonprog_item_eight_palette_indices: ; symbol provided for AP patcher to overwrite these 8 bytes:
     db $00, $00, $00, $00, $00, $00, $00, $00
 
 pushpc
-org $899200
+org $899600
 offworld_graphics_data_progression_item:
-org $899300
+org $899700
 offworld_graphics_data_item:
-; the randomizer's patcher will write the actual graphics here at $89:9200 and $89:9300
+; the randomizer's patcher will write the actual graphics here at $89:9600 and $89:9700
 pullpc ; back to bank $84
 v_item:
     dw !IVisibleItem
@@ -68,6 +68,8 @@ c_item:
 h_item:
     dw !IHiddenItem
 
+pushpc
+org $84EFD7
 ; indexed by 0 <= item id <= 3
 ammo_loop_table:
     ; PLM instruction sequence pointers:
@@ -76,6 +78,7 @@ ammo_loop_table:
     dw #p_missile_loop, #p_missile_hloop ; Missiles
     dw #p_super_loop,   #p_super_hloop   ; Super Missiles
     dw #p_pb_loop,      #p_pb_hloop      ; Power Bombs
+pullpc
 
 i_visible_item:
     lda #$0006
