@@ -28,9 +28,6 @@ endmacro
 !table_box_yellow = "table box_smmr.tbl"
 !table_box_green = "table box_smmr.tbl"
 
-; linked to check_reload in fast_reload.asm of MapRando
-!check_reload = "jsl $8598C1"
-
 !SRAM_MW_ITEMS_RECV = $702602 ; current item RECV
 !SRAM_MW_ITEMS_RECV_WCOUNT = $702606
 !SRAM_SAVING = $702608
@@ -49,11 +46,6 @@ endmacro
 !SRAM_MW_CONFIG_DEATHLINK = $702674
 !SRAM_MW_CONFIG_REMOTE_ITEMS = $702676
 !SRAM_MW_CONFIG_PLAYER_ID = $702678
-
-org $00ffc0
-    ;   0              f01234
-    db "      SM RANDOMIZER  "
-    db $30, $02, $0C, $04, $00, $01, $00, $20, $07, $DF, $F8
 
 org $808000				; Disable copy protection screen
 	db $ff

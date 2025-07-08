@@ -94,8 +94,7 @@
 
 ; see MapRando itemsounds.asm
 !Click = $37			;Sound when selecting a HUD item
-!SOUNDFX = $EFFE
-!SETFX = $84F01C
+!SOUNDFX = $F473
 
 mw_init_memory:
     rep #$30
@@ -392,7 +391,7 @@ mw_receive_item:
     phb ; data bank cannot be C0+ since SETFX reads from 0000,y and must access WRAM that way
     pea $7e7e
     plb : plb ; DB = $7E
-    jsl !SETFX
+    jsr SETFX1
     plb ; restore DB
     lda #$0037
     jsl $809049 ; play sound #$37, or was it 1, idk TODO document
@@ -409,6 +408,13 @@ mw_receive_item:
     stz.b $cc
     plx : pla
     rts
+
+SETFX1:
+	LDA #$0002
+	STA $05D7
+	LDA $0000,y
+	INY
+	RTS
 
 ; from varia endingtotals.asm - code copied to here so we don't depend on any jsl address without a symbol
 ;                               (and in order to save precious room in bank $84 for optional varia decoupling)
