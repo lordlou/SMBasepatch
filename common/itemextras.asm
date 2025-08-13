@@ -4,15 +4,15 @@
 ; relocatable to any bank
 ; indexed by 0 <= item id <= 0n23
 sm_item_graphics:
-    ; highest bit clear means this item type's gfx is always loaded already,
-    ; and the value is an item gfx index that can be stored directly at $7e:df0c,x
-    dw $0008 ; Energy Tank
-    dw $000A ; Missile
-    dw $000C ; Super Missile
-    dw $000E ; Power Bomb
     ; pointers to a 10-byte graphics data entry anywhere in bank $84 (this value will be saved by $84:8764 Load item PLM GFX)
     ; for example: $84:E12F in vanilla ROM contains: $8000 (implied bank $89:8000: bomb plm graphic data), followed by 8 palette indices
     ;              $84:E12F: $8000,00,00,00,00,00,00,00,00
+    ; the first 4 entries were always loaded in vanilla but are now dynamically loaded by Map Rando (see etank_gfx_header and following in Item Loading.asm)
+    dw $86DD ; Energy Tank
+    dw $86E7 ; Missile
+    dw $86F1 ; Super Missile
+    dw $86FB ; Power Bomb
+
     dw $E12F ; Bombs (graphics at $89:8000)
     dw $E15D ; Charge (graphics at $89:8B00)
     dw $E18B ; Ice Beam (graphics at $89:8C00)
@@ -83,14 +83,6 @@ i_item_setup_shared:
     asl ; multiply by 2 for table width
     tax
     lda.l sm_item_graphics, x
-    bpl .alwaysloaded   ; if high bit is not set, this isn't a pointer
-
     plx : ply
-    rtl
-
-.alwaysloaded
-    plx : ply
-    tyx
-    sta.l $7edf0c, x
     rtl
 

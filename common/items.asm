@@ -243,19 +243,6 @@ i_start_draw_loop:
     adc.l rando_item_table+$6, x      ; add one if off-world item isnt progression
 
 .all_items
-    cmp #$0004
-    bpl .non_ammo_item
-    ; item id <= 3: a graphics-always-loaded 'ammo'-ish item (etank, missile, super, or pb):
-    asl #2    ; \
-    clc       ;  } X = item id * 4   + (2 if hidden, 0 otherwise)
-    adc.b $00 ;  }     ^ selects row    ^ selects column
-    tax       ; /
-    lda.l ammo_loop_table, x
-    tay
-    plx
-    rts ; return Y = pointer to next position in PLM instruction sequence (sort of a 'goto' conceptually)
-
-.non_ammo_item
     plx
     rts
 
@@ -277,18 +264,9 @@ i_load_custom_graphics:
     asl ; multiply by 2 for table width
     tax
     lda.l sm_item_graphics, x
-    bpl .alwaysloaded   ; if high bit is not set, this isn't a pointer
     tay ; Y = pointer to 10-byte graphics entry to load (implied bank $84)
     plx ; X = PLM index again
     jsr $8764               ; Jump to original PLM graphics loading routine ($84:8764)
-    ply
-    rts
-
-.alwaysloaded
-    tax
-    lda.b $00, x
-    plx ; X = PLM index again
-    sta.l $7edf0c, x
     ply
     rts
 
