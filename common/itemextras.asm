@@ -30,7 +30,7 @@ sm_item_graphics:
     dw $E3C3 ; Screw attack (graphics at $89:8500)
     dw $E3F1 ; Morph ball (graphics at $89:8700)
     dw $E41F ; Reserve tank (graphics at $89:9000)
-    dw $F66E ; F660 + E (Map Rando WallJump boots items, see walljump_item.asm) (graphics at $89:9100)
+    dw $F00E ; F000 + E (Map Rando WallJump boots items, see walljump_item.asm) (graphics at $89:9100)
     dw plm_graphics_entry_offworld_progression_item
     dw plm_graphics_entry_offworld_item
 
